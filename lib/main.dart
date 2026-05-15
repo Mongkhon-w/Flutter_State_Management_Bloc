@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_state_management_bloc/bloc/counter/counter_a_bloc/bloc/counter_a_bloc.dart';
+import 'package:flutter_state_management_bloc/bloc/counter/counter_b_bloc/bloc/counter_b_bloc.dart';
 import 'package:flutter_state_management_bloc/screen/home_page.dart';
 
 void main() {
@@ -10,10 +13,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Home Page',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    final counterABloc = BlocProvider<CounterABloc>(
+      create: (context) => CounterABloc(),
+    );
+
+    final counterBBloc = BlocProvider<CounterBBloc>(
+      create: (context) => CounterBBloc(),
+    );
+    return MultiBlocProvider(
+      providers: [counterABloc, counterBBloc],
+      child: MaterialApp(
+        title: 'Home Page',
+        theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
