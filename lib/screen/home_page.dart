@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_state_management_bloc/bloc/counter/counter_a_bloc/bloc/counter_a_bloc.dart';
+import 'package:flutter_state_management_bloc/route/app_route.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -17,12 +18,19 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            // ใช้ Navigator เพื่อไปยังหน้า CountPage ตามที่ตั้งไว้ใน AppRoute
+            onPressed: () => Navigator.pushNamed(context, AppRoute.count),
+            icon: const Icon(Icons.navigate_next),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: .center,
+          // แก้ไขจุดนี้: ต้องใช้ MainAxisAlignment.center (ห้ามลืมชื่อ Class)
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text('You have pushed the button this many times:'),
             BlocBuilder<CounterABloc, CounterAState>(
@@ -40,16 +48,19 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            // ป้องกันปัญหา Hero Tag ซ้ำถ้าหน้านี้ถูกเรียกซ้ำซ้อน
+            heroTag: "homeReset",
             onPressed: () =>
                 context.read<CounterABloc>().add(CounterAEventReset()),
             tooltip: 'Reset',
             child: const Icon(Icons.restore),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           FloatingActionButton(
+            heroTag: "homeAdd",
             onPressed: () =>
                 context.read<CounterABloc>().add(CounterAEventAdd()),
-            tooltip: 'add',
+            tooltip: 'Add',
             child: const Icon(Icons.add),
           ),
         ],
